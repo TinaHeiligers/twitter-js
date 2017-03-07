@@ -1,4 +1,6 @@
-const _ = require('lodash');
+const _ = require('lodash');//gives us some awesome functionality so that we can use a locally created and modyfiable array as our data storage option.
+
+
 var data = [];
 var counter = 0;
 function add (x, y) {
@@ -7,15 +9,17 @@ function add (x, y) {
 }
 
 function list () {
-  return _.cloneDeep(data);
+  return _.cloneDeep(data);//creates a deep copy of the original object to work with/on. This ensures we don't modify our original data store.
 }
 
 function find (properties) {
   return _.cloneDeep(_.filter(data, properties));
 }
 
+//exporting the functions above to the app
 module.exports = { add: add, list: list, find: find };
 
+//creating random data to store in our data store (array).
 const randArrayEl = function(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 };
@@ -31,26 +35,9 @@ const getFakeTweet = function() {
   return "Fullstack Academy is " + randArrayEl(awesome_adj) + "! The instructors are just so " + randArrayEl(awesome_adj) + ". #fullstacklove #codedreams";
 };
 
+//ask why do we export the .add() function again but this time with parameters?
 for (let i = 0; i < 10; i++) {
   module.exports.add( getFakeName(), getFakeTweet() );
 }
-
-// module.exports.list();
-// nodeconsole.log(list());
-
-// const names = [], tweets = [];
-
-// for (let i = 0; i < 10; i++) {
-//     var name = getFakeName();
-//     var tweet = getFakeTweet()
-//   names.push(name);
-//   tweets.push(tweet);
-// }
-
-// console.log(names);
-// console.log(tweets);
-
-// module.exports.add(names, tweets);
-// console.log(find());
 
 console.log(data);

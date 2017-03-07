@@ -1,21 +1,21 @@
 // const express = require('express');
 // const router = express.Router();
-var router = require('express').Router();
-var tweetBank = require('../tweetBank');
+var router = require('express').Router();//creates a new instance of a router.
+var tweetBank = require('../tweetBank');//our data
 
 
-router.get('/', function (req, res) {
-  let tweets = tweetBank.list();
-  res.render( 'index', { tweets: tweets, showForm: true } );
+router.get('/', function (req, res, next) {
+  // res.send('reached modular route');//checking we're getting our routes for initial checks.
+  let tweets = tweetBank.list();//getting our data in
+  res.render( 'index', { tweets: tweets, showForm: true } );//adding the form as true only on the index page
+  next();
 });
 
-router.get('/users/:name', function(req, res) {
-  var name = req.params.name;
-  var list = tweetBank.find( {name: name});
-  console.log("logging list next")
-  console.log(list);
+router.get('/users/:FullName', function(req, res) {
+  var nameCaptured = req.params.FullName;//grabbing the name that was passed into the path
+  var list = tweetBank.find( {name: nameCaptured});//the second name here is what was entered into the url
   //we want to render the content in the list array for the given name of a specific object in the array.
-  res.render( 'index', { tweets: list } );
+  res.render( 'index', { tweets: list, showForm: true, username: req.params.nameCaptured } );
 });
 
 router.get('/tweets/:id', function(req, res) {
@@ -27,12 +27,12 @@ router.get('/tweets/:id', function(req, res) {
   res.render( 'index', { tweets: list } );
 });
 
-router.post('/tweets', function(req, res) {
+router.post('/tweets', function(req, res, next) {
   if (!req.body) return res.sendStatus(400);
-  var name = req.body.name;
-  var text = req.body.text;
-  tweetBank.add(name, text);
-  res.redirect('/');
+  //we need body parser to call an object on the body.
+  tweetBank.add(req.body.name, req.body.text);
+  res.redirect('/');//sends the route to the main index to show the enw one just added
+  next();
 });
 
 
